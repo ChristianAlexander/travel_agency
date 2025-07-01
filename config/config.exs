@@ -57,7 +57,7 @@ config :spark,
 config :travel_agency,
   ecto_repos: [TravelAgency.Repo],
   generators: [timestamp_type: :utc_datetime],
-  ash_domains: [TravelAgency.Chat, TravelAgency.Accounts]
+  ash_domains: [TravelAgency.Chat, TravelAgency.Accounts, TravelAgency.Integrations]
 
 # Configures the endpoint
 config :travel_agency, TravelAgencyWeb.Endpoint,
