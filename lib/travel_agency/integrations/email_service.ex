@@ -1,6 +1,8 @@
 defmodule TravelAgency.Integrations.EmailService do
   require Logger
 
+  alias TravelAgency.Integrations.Senders.SendTripConfirmationEmail
+
   @timeout_rate 0.5
 
   def send(destination, message) do
@@ -18,7 +20,7 @@ defmodule TravelAgency.Integrations.EmailService do
         {:error, :bad_destination}
 
       true ->
-        {:ok, :sent}
+        SendTripConfirmationEmail.send(destination, message)
     end
   end
 end
