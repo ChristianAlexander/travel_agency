@@ -12,7 +12,7 @@ config :ash_oban, pro?: false
 config :travel_agency, Oban,
   engine: Oban.Engines.Basic,
   notifier: Oban.Notifiers.Postgres,
-  queues: [default: 10],
+  queues: [default: 10, chat_responses: [limit: 10], conversations: [limit: 10]],
   repo: TravelAgency.Repo,
   plugins: [{Oban.Plugins.Cron, []}]
 
@@ -57,7 +57,7 @@ config :spark,
 config :travel_agency,
   ecto_repos: [TravelAgency.Repo],
   generators: [timestamp_type: :utc_datetime],
-  ash_domains: [TravelAgency.Accounts]
+  ash_domains: [TravelAgency.Chat, TravelAgency.Accounts]
 
 # Configures the endpoint
 config :travel_agency, TravelAgencyWeb.Endpoint,

@@ -26,6 +26,8 @@ defmodule TravelAgencyWeb.Router do
     pipe_through :browser
 
     ash_authentication_live_session :authenticated_routes do
+      live "/chat", ChatLive
+      live "/chat/:conversation_id", ChatLive
       # in each liveview, add one of the following at the top of the module:
       #
       # If an authenticated user must be present:

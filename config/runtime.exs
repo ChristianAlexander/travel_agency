@@ -1,5 +1,4 @@
 import Config
-
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the
 # system starts, so it is typically used to load production configuration
@@ -19,6 +18,8 @@ import Config
 if System.get_env("PHX_SERVER") do
   config :travel_agency, TravelAgencyWeb.Endpoint, server: true
 end
+
+config :langchain, anthropic_key: fn -> System.fetch_env!("ANTHROPIC_API_KEY") end
 
 if config_env() == :prod do
   database_url =
