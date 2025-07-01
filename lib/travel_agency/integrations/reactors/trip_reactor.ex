@@ -1,5 +1,5 @@
 defmodule TravelAgency.Integrations.Reactors.TripReactor do
-  use Reactor
+  use Reactor, extensions: [Ash.Reactor]
 
   alias TravelAgency.Integrations.{EmailService, FlightService, HotelService}
   alias TravelAgency.Integrations.Steps.BookFlightStep
@@ -19,20 +19,21 @@ defmodule TravelAgency.Integrations.Reactors.TripReactor do
     argument(:flight_number, result(:find_flight_number))
   end
 
+  action :compose_email, TravelAgency.Integrations.Actions, :compose_confirmation_email do
+    inputs %{
+      flight_number: result(:find_flight_number),
+      flight_confirmation_code: result(:book_flight),
+      hotel_confirmation_code: result(:book_hotel)
+    }
+  end
+
   step :email_user do
     argument(:user_email, input(:user_email))
-    argument(:hotel_code, result(:book_hotel))
-    argument(:flight_code, result(:book_flight))
+    argument(:email_message, result(:compose_email))
     max_retries(2)
 
     run(fn inputs ->
-      message = """
-      Your hotel and car have been booked!
-      Flight confirmation: #{inputs.flight_code}
-      Hotel confirmation: #{inputs.hotel_code}
-      """
-
-      EmailService.send(inputs.user_email, message)
+      EmailService.send(inputs.user_email, inputs.email_message)
     end)
 
     compensate(fn
